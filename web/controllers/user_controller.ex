@@ -3,8 +3,16 @@ defmodule MyApp.UserController do
 
   def create(conn, params) do
     attrs = %{email: params["email"]}
-    {:ok, user} = MyApp.Users.Invite.call(attrs)
 
+    case MyApp.Users.Invite.call(attrs) do
+      {:ok, user} ->
+        render_user(conn, user)
+      {:error, :invalid_email} ->
+        resp(conn, 400, %{message: "email is invalid"} |> Poison.encode!)
+    end
+  end
+
+  defp render_user(conn, user) do
     {:ok, body} = %{
       id: user.id,
       email: user.email
