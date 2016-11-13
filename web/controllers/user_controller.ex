@@ -1,7 +1,7 @@
 defmodule MyApp.UserController do
   use MyApp.Web, :controller
 
-  def create(conn, _params) do
+  def create(conn, params) do
     {:ok, user} = MyApp.Users.Invite.call(params)
 
     conn
